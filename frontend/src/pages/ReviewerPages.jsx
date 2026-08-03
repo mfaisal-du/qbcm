@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card, Button, TextArea, Badge, Spinner, Alert, StatusGuide, STATUS_TOOLTIPS } from '../components/Common';
 import { DashboardMetricCard } from '../components/dashboard/DashboardMetricCard';
 import { SimpleBarChart } from '../components/dashboard/charts/SimpleBarChart';
+import { useAuthStore } from '../store';
 import toast from 'react-hot-toast';
 
 export const ReviewerDashboard = () => {
