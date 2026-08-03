@@ -183,14 +183,57 @@ export const getAllQuestions = async (filters = {}) => {
   }));
 };
 
-export const getQuestionsByCreator = async (creatorId) => {
-  const query = `SELECT * FROM questions WHERE createdBy = ? ORDER BY createdAt DESC`;
-  const [rows] = await pool.execute(query, [creatorId]);
+export const getQuestionsByCreator = async (creatorId, status = null) => {
+  const conditions = ['createdBy = ?'];
+  const params = [creatorId];
+  if (status) { conditions.push('status = ?'); params.push(status); }
+  const query = `SELECT * FROM questions WHERE ${conditions.join(' AND ')} ORDER BY createdAt DESC`;
+  const [rows] = await pool.execute(query, params);
 
   return rows.map(row => ({
     ...row,
     options: parseOptions(row.options || '[]')
   }));
+};
+
+export const getPendingQuestions = async () => {
+  const query = `SELECT * FROM questions WHERE status IN ('draft', 'vetted') ORDER BY createdAt DESC`;
+  const [rows] = await pool.execute(query);
+
+  return rows.map(row => ({
+    ...row,
+    options: parseOptions(row.options || '[]')
+  }));
+};
+
+export const getVettedQuestions = async () => {
+  const query = `SELECT * FROM questions WHERE status = 'vetted' ORDER BY createdAt DESC`;
+  const [rows] = await pool.execute(query);
+
+  return rows.map(row => ({
+    ...row,
+    options: parseOptions(row.options || '[]')
+  }));
+};
+
+export const getQuestionStats = async (filters = {}) => {
+  const conditions = [];
+  const params = [];
+  if (filters.createdBy) { conditions.push('createdBy = ?'); params.push(filters.createdBy); }
+  const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+  const [rows] = await pool.execute(
+    `SELECT status, COUNT(*) AS count FROM questions ${where} GROUP BY status`
+  );
+
+  const counts = { draft: 0, vetted: 0, active: 0, used: 0, rejected: 0, archived: 0 };
+  let total = 0;
+  for (const row of rows) {
+    const n = Number(row.count) || 0;
+    if (counts[row.status] !== undefined) counts[row.status] = n;
+    total += n;
+  }
+  return { ...counts, total };
 };
 
 export const getPracticeQuestions = async (filters = {}) => {
