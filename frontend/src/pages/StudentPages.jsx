@@ -8,6 +8,39 @@ import { DashboardMetricCard } from '../components/dashboard/DashboardMetricCard
 import { SimpleBarChart } from '../components/dashboard/charts/SimpleBarChart';
 import toast from 'react-hot-toast';
 
+const ResultsTable = ({ navigate }) => {
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    studentAnswerService.getMyResults()
+      .then(r => setResults(r.data.results || []))
+      .catch(() => setResults([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <Spinner />;
+  if (results.length === 0) return <p className="text-sm text-gray-400 text-center py-10">No results yet. Practice questions to see your latest results.</p>;
+
+  return (
+    <div className="space-y-2">
+      {results.slice(0, 5).map((result, idx) => (
+        <div key={idx} className="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer" onClick={() => navigate('/student/results')}>
+          <div className="min-w-0 mr-3">
+            <p className="text-sm font-semibold text-gray-800 truncate">{(result.questionText || '').substring(0, 60)}...</p>
+            <p className="text-xs text-gray-500">{result.subject} - {result.topic}</p>
+          </div>
+          {result.isCorrect ? (
+            <Badge type="success">✓ Correct</Badge>
+          ) : (
+            <Badge type="error">✗ Incorrect</Badge>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export const StudentDashboard = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();

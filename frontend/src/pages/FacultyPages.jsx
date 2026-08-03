@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Plus, Edit2, Trash2, Eye, CheckCircle, XCircle, Clock, TrendingUp, BarChart3, Award, ArrowRight, Download, Upload, Filter, Search, X, FileText, Calendar, Activity, Send, Archive, User, BookOpen, Volume2, PauseCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, CheckCircle, XCircle, Clock, TrendingUp, BarChart3, Award, ArrowRight, Download, Upload, Filter, Search, X, FileText, Calendar, Activity, Send, Archive, User, BookOpen, Volume2, PauseCircle, PieChart } from 'lucide-react';
 import { questionService, reviewService, academicService, authService } from '../services/api';
 import { useAuthStore } from '../store';
 import { useNavigate } from 'react-router-dom';
