@@ -4,6 +4,7 @@ import { Plus, Edit2, Trash2, Shield, Users, BookOpen, ClipboardList, TrendingUp
 import { userService, academicService, questionService, assessmentService } from '../services/api';
 import { Card, Button, Input, Select, Modal, Badge, Spinner, Table, StatusGuide, STATUS_TOOLTIPS, CountUp, MiniSparkline, ProgressRing } from '../components/Common';
 import { DashboardMetricCard } from '../components/dashboard/DashboardMetricCard';
+import { SimpleBarChart } from '../components/dashboard/charts/SimpleBarChart';
 import { useAuthStore } from '../store';
 import toast from 'react-hot-toast';
 
