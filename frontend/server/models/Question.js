@@ -2,6 +2,16 @@ import pool from '../config/database.js';
 
 const COLUMN_CACHE = { columns: null, timestamp: 0 };
 
+const parseOptions = (value) => {
+  if (value == null) return [];
+  if (typeof value !== 'string') return value;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return [];
+  }
+};
+
 async function getQuestionColumns() {
   const now = Date.now();
   if (!COLUMN_CACHE.columns || now - COLUMN_CACHE.timestamp > 60000) {
@@ -72,7 +82,7 @@ export const getQuestionById = async (questionId) => {
   const [rows] = await pool.execute(query, [questionId]);
 
   if (rows[0]) {
-    rows[0].options = JSON.parse(rows[0].options || '[]');
+    rows[0].options = parseOptions(rows[0].options);
   }
 
   return rows[0];
@@ -92,7 +102,7 @@ export const getQuestionsByYear = async (year, semester = null) => {
 
   return rows.map(row => ({
     ...row,
-    options: JSON.parse(row.options || '[]')
+    options: parseOptions(row.options || '[]')
   }));
 };
 
@@ -110,7 +120,7 @@ export const getQuestionsBySubject = async (subject, topic = null) => {
 
   return rows.map(row => ({
     ...row,
-    options: JSON.parse(row.options || '[]')
+    options: parseOptions(row.options || '[]')
   }));
 };
 
@@ -120,7 +130,7 @@ export const getQuestionsByTopic = async (topic) => {
 
   return rows.map(row => ({
     ...row,
-    options: JSON.parse(row.options || '[]')
+    options: parseOptions(row.options || '[]')
   }));
 };
 
@@ -134,7 +144,7 @@ export const getQuestionsByIds = async (questionIds = []) => {
 
   return rows.map(row => ({
     ...row,
-    options: JSON.parse(row.options || '[]')
+    options: parseOptions(row.options || '[]')
   }));
 };
 
@@ -169,7 +179,7 @@ export const getAllQuestions = async (filters = {}) => {
 
   return rows.map(row => ({
     ...row,
-    options: JSON.parse(row.options || '[]')
+    options: parseOptions(row.options || '[]')
   }));
 };
 
@@ -179,7 +189,7 @@ export const getQuestionsByCreator = async (creatorId) => {
 
   return rows.map(row => ({
     ...row,
-    options: JSON.parse(row.options || '[]')
+    options: parseOptions(row.options || '[]')
   }));
 };
 
@@ -206,7 +216,7 @@ export const getPracticeQuestions = async (filters = {}) => {
 
   return rows.map(row => ({
     ...row,
-    options: JSON.parse(row.options || '[]')
+    options: parseOptions(row.options || '[]')
   }));
 };
 
