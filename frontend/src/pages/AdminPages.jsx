@@ -362,8 +362,6 @@ export const SuperAdminDashboard = () => {
     load();
   }, [user]);
 
-  if (loading) return <div className="flex justify-center items-center h-screen"><Spinner /></div>;
-
   const superChartData = useMemo(() => [
     { name: 'Users', value: stats.totalUsers },
     { name: 'Questions', value: stats.totalQuestions },
@@ -380,6 +378,8 @@ export const SuperAdminDashboard = () => {
     { name: 'Reviews', value: 100 },
     { name: 'System', value: 100 },
   ]), []);
+
+  if (loading) return <div className="flex justify-center items-center h-screen"><Spinner /></div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-rose-950 p-6">
